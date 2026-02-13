@@ -2,5 +2,12 @@
 <fmxmlsnippet type="FMObjectList">
   <Step enable="True" id="0" name="Insert Current Time">
     <SelectAll state="True"/>
+    <Text/>
+    <Field>$variable</Field>
   </Step>
 </fmxmlsnippet>
+<!-- SelectAll state: "True" replaces entire contents of the field or variable. "False" inserts at the insertion point (or appends for variables without container data). -->
+<!-- Target: Field element uses <Field table="" id="0" name=""/> for a field, or <Field>$variable</Field> for a variable. -->
+<!-- Optional: SelectAll, Target (field or variable). If Target is omitted, the active field is used; returns an error if no active field. -->
+<!-- If targeting a variable that does not exist, this step creates it. -->
+<!-- See https://help.claris.com/en/pro-help/content/insert-current-time.html -->

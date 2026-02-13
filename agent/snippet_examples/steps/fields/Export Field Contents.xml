@@ -4,5 +4,14 @@
     <CreateDirectories state="True"/>
     <AutoOpen state="False"/>
     <CreateEmail state="False"/>
+    <UniversalPathList>$path</UniversalPathList>
+    <Field table="" id="0" name=""/>
   </Step>
 </fmxmlsnippet>
+<!-- CreateDirectories state: "True" creates folders specified in the output file path. "False" does not. -->
+<!-- AutoOpen state: "True" opens the exported file with the default application. "False" does not. -->
+<!-- CreateEmail state: "True" creates a new email with the file as attachment. "False" does not. -->
+<!-- Required: Field (target field to export). If omitted, exports the current field in the active table. -->
+<!-- Optional: UniversalPathList (output file path), CreateDirectories, AutoOpen, CreateEmail. If no path is specified, the user is prompted. -->
+<!-- Text fields are exported as UTF-16 (use TextEncode to convert first). In FileMaker Go, text is exported as UTF-8. -->
+<!-- See https://help.claris.com/en/pro-help/content/export-field-contents.html -->

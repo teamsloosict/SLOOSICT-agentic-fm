@@ -2,5 +2,10 @@
 <fmxmlsnippet type="FMObjectList">
   <Step enable="True" id="0" name="Insert from Last Visited">
     <SelectAll state="True"/>
+    <Field table="" id="0" name=""/>
   </Step>
 </fmxmlsnippet>
+<!-- SelectAll state: "True" replaces entire field contents. "False" inserts at the insertion point or appends to end. -->
+<!-- Optional: SelectAll, Field (target field). If Field is omitted, the active field is used; returns an error if field not on layout. -->
+<!-- Pastes data from the same field in the last active record (last record where activity occurred, e.g. pasting text or Go to Field). -->
+<!-- See https://help.claris.com/en/pro-help/content/insert-from-last-visited.html -->

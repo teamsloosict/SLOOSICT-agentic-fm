@@ -4,6 +4,25 @@
     <NoInteract state="True"/>
     <DontEncodeURL state="False"/>
     <SelectAll state="True"/>
-    <VerifySSLCertificates state="False"/>
+    <VerifySSLCertificates state="True"/>
+    <CURLOptions>
+      <Calculation><![CDATA["--flags"]]></Calculation>
+    </CURLOptions>
+    <Calculation><![CDATA[$url]]></Calculation>
+    <Text/>
+    <Field>$file</Field>
   </Step>
 </fmxmlsnippet>
+<!-- NoInteract state: "True" suppresses the Insert from URL Options dialog. "False" shows the dialog. -->
+<!-- SelectAll state: "True" replaces entire contents of the field or variable. "False" inserts at the insertion point (or appends for variables without container data). -->
+<!-- DontEncodeURL state: "False" automatically encodes special characters (e.g. space to %20). "True" leaves the URL as entered. cURL options are never encoded. -->
+<!-- VerifySSLCertificates state: "True" verifies the server's SSL certificate. "False" skips verification. With Set Error Capture on, unverified cert behaves as server unavailable. -->
+<!-- Target: Field element uses <Field table="" id="0" name=""/> for a field, or <Field>$variable</Field> for a variable. -->
+<!-- Required: Calculation (the URL). -->
+<!-- Optional: NoInteract, SelectAll, DontEncodeURL, VerifySSLCertificates, CURLOptions, Target. If Target is omitted, the active field is used; returns an error if no active field. -->
+<!-- If targeting a variable that does not exist, this step creates it. Variable data is stored as text by default; use the FM-Store-As-Container cURL option for container data. -->
+<!-- Supported protocols: http, https, ftp, ftps, sftp, file, smb, smtp, smtps, ldap, ldaps. -->
+<!-- file protocol: not supported in WebDirect, Data API, or CWP; server-side scripts can only access Documents or temporary folder. -->
+<!-- FileMaker Go does not support ldap/ldaps. -->
+<!-- Insert from URL supports only UTF-8 for the URL. Use --max-time cURL option to control timeout. -->
+<!-- See https://help.claris.com/en/pro-help/content/insert-from-url.html -->

@@ -2,5 +2,12 @@
 <fmxmlsnippet type="FMObjectList">
   <Step enable="True" id="0" name="Relookup Field Contents">
     <NoInteract state="True"/>
+    <Field table="" id="0" name=""/>
   </Step>
 </fmxmlsnippet>
+<!-- NoInteract state: "True" suppresses the confirmation dialog. "False" shows the dialog. -->
+<!-- Required: Field (the match field for the relationship the lookup is based on — not the lookup source or target field). Returns an error if no field is specified. -->
+<!-- The target field must be editable. Calculation fields cannot be used; specify one of the calculation's input fields instead. -->
+<!-- Relookups are performed only on the found set of the active table. Data must be committed before this step runs or results may be unexpected. -->
+<!-- Server-side scripts, Data API, and CWP always run as if NoInteract is "True". -->
+<!-- See https://help.claris.com/en/pro-help/content/relookup-field-contents.html -->

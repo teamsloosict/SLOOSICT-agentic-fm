@@ -2,8 +2,20 @@
 <fmxmlsnippet type="FMObjectList">
   <Step enable="True" id="0" name="Replace Field Contents">
     <NoInteract state="True"/>
-    <Restore state="False"/>
-    <With value="None"/>
-    <SerialNumbers PerformAutoEnter="False" UpdateEntryOptions="False" increment="0" InitialValue="" UseEntryOptions="False"/>
+    <Restore state="True"/>
+    <With value="Calculation"/>
+    <Calculation><![CDATA[]]></Calculation>
+    <SerialNumbers PerformAutoEnter="True" UpdateEntryOptions="False" UseEntryOptions="True"/>
+    <Field table="" id="0" name=""/>
   </Step>
 </fmxmlsnippet>
+<!-- NoInteract state: "True" suppresses the Replace Field Contents dialog. "False" shows the dialog. -->
+<!-- Restore state: "True" uses the stored/specified replacement settings. "False" does not restore stored settings. -->
+<!-- With value: "Calculation" (replace with calculated result) | "SerialNumbers" (reserialize the field) | "CurrentContents" (replace with current record's value) -->
+<!-- SerialNumbers PerformAutoEnter: "True" triggers auto-enter options on other fields as records are updated. "False" does not. -->
+<!-- SerialNumbers UpdateEntryOptions: "True" resets Entry Options serial number to follow reserialized records. "False" leaves Entry Options unchanged. -->
+<!-- SerialNumbers UseEntryOptions: "True" uses Entry Options next value as starting serial. "False" uses custom start/increment values. -->
+<!-- Required: Field (target field for replace). -->
+<!-- Optional: NoInteract, Restore, Calculation (when With="Calculation"), SerialNumbers (when With="SerialNumbers"). -->
+<!-- IMPORTANT: Modifies ALL records in the found set. Cannot be undone. Data must be committed before running or results may be unexpected. -->
+<!-- See https://help.claris.com/en/pro-help/content/replace-field-contents.html -->

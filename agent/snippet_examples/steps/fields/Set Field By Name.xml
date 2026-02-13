@@ -1,4 +1,19 @@
 <?xml version="1.0"?>
 <fmxmlsnippet type="FMObjectList">
-  <Step enable="True" id="0" name="Set Field By Name"/>
+  <Step enable="True" id="0" name="Set Field By Name">
+    <Result>
+      <Calculation><![CDATA[]]></Calculation>
+    </Result>
+    <TargetName>
+      <Calculation><![CDATA[]]></Calculation>
+    </TargetName>
+  </Step>
 </fmxmlsnippet>
+<!-- Required: TargetName (calculation that returns the fully qualified field name as text, e.g. "TableOccurrence::FieldName"), Result (calculated value to set). -->
+<!-- If TargetName is omitted, the active field in Browse or Find mode is used. -->
+<!-- If the field name is not wrapped in quotation marks, the value is obtained from the named field (indirect reference). -->
+<!-- The target field does not need to be on the current layout. -->
+<!-- Set Field By Name ignores validation checking. -->
+<!-- A single Set Field By Name step can replace multiple Set Field steps between If conditions, since the target is calculated. -->
+<!-- Group consecutive Set Field By Name steps together for performance; the record stays active until exited or committed, avoiding repeated lock/unlock/index cycles. -->
+<!-- See https://help.claris.com/en/pro-help/content/set-field-by-name.html -->

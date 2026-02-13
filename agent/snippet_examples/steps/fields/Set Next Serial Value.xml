@@ -1,4 +1,12 @@
 <?xml version="1.0"?>
 <fmxmlsnippet type="FMObjectList">
-  <Step enable="True" id="0" name="Set Next Serial Value"/>
+  <Step enable="True" id="0" name="Set Next Serial Value">
+    <Calculation><![CDATA["calc"]]></Calculation>
+    <Field table="" id="0" name=""/>
+  </Step>
 </fmxmlsnippet>
+<!-- Required: Field (must be defined as an auto-entry serial number field), Calculation (the next serial value; always evaluates to text). -->
+<!-- This step changes the field's serial number definition, not the actual field contents. -->
+<!-- Useful after importing records or deleting serialized records to reset the next serial value. -->
+<!-- Can operate across files: specify a field in another file via a relationship to update its serial number. -->
+<!-- See https://help.claris.com/en/pro-help/content/set-next-serial-value.html -->

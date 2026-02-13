@@ -2,5 +2,14 @@
 <fmxmlsnippet type="FMObjectList">
   <Step enable="True" id="0" name="Insert Text">
     <SelectAll state="True"/>
+    <Text>text content</Text>
+    <Field>$variable</Field>
   </Step>
 </fmxmlsnippet>
+<!-- SelectAll state: "True" replaces entire contents of the field or variable. "False" inserts at the insertion point (or appends for variables without container data). -->
+<!-- Target: Field element uses <Field table="" id="0" name=""/> for a field, or <Field>$variable</Field> for a variable. -->
+<!-- Required: Text (the exact text value to paste). -->
+<!-- Optional: SelectAll, Target (field or variable). If Target is omitted, the active field is used; returns an error if no active field. -->
+<!-- If targeting a variable that does not exist, this step creates it. -->
+<!-- Intended for text field types. For other data types use Insert Calculated Result or Set Field instead. -->
+<!-- See https://help.claris.com/en/pro-help/content/insert-text.html -->

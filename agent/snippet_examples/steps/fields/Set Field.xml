@@ -1,4 +1,13 @@
 <?xml version="1.0"?>
 <fmxmlsnippet type="FMObjectList">
-  <Step enable="True" id="0" name="Set Field"/>
+  <Step enable="True" id="0" name="Set Field">
+    <Calculation><![CDATA[]]></Calculation>
+    <Field table="" id="0" name=""/>
+  </Step>
 </fmxmlsnippet>
+<!-- Required: Calculation (the value to set), Field (target field). If Field is omitted, the active field in Browse or Find mode is used. -->
+<!-- The target field does not need to be on the current layout. -->
+<!-- Calculation result must match the field type. If validation is set to "Always" and the result doesn't match, the field is not set and an error is returned. -->
+<!-- Group consecutive Set Field steps together for performance; the record stays active until exited or committed, avoiding repeated lock/unlock/index cycles. -->
+<!-- For repeating fields, a repetition number can be specified or generated from a calculation. -->
+<!-- See https://help.claris.com/en/pro-help/content/set-field.html -->

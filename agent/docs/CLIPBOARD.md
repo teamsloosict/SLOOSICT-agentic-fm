@@ -18,7 +18,7 @@ Each FileMaker object type corresponds to a four-letter AppleScript class code:
 | `XMLO` | Layout Objects (legacy)   | `<Layout>`                 |
 | `XMFD` | Field Definition          | `<Field>`                  |
 | `XMFN` | Custom Function           | `<CustomFunction>`         |
-| `XMTB` | Table                     | `<Table>`                  |
+| `XMTB` | Table                     | `<BaseTable>`              |
 | `XMVL` | Value List                | `<ValueList>`              |
 | `XMTH` | Theme                     | `<Theme>`                  |
 
@@ -70,14 +70,28 @@ Understanding the encoding helps when diagnosing issues or working outside of `c
 
 ### Reading (FM → XML)
 
-When FileMaker objects are on the clipboard, this AppleScript pipeline extracts them as formatted XML:
+FileMaker stores clipboard data as a record keyed by the full AppleScript class notation: `{«class XMSS»: «data XMSS3C...»}`. The key point is that you must use `«class XMSS»` (not bare `XMSS`) as the property accessor — otherwise AppleScript cannot find the key in the record.
+
+The `clipboard.py` script detects the class, then fetches the value using `osascript -e 'the clipboard as «class XMSS»'`. The `as` coercion form is used rather than `«class XMSS» of (the clipboard)` — the `of` form treats the clipboard as a record and fails when the clipboard's primary type is plain text (which happens when a single text label is copied in Layout Mode). The `as` form locates the requested type regardless of what the primary type is. osascript prints the binary descriptor as:
+
+```
+«data XMSS3C666D786D6C736E69707065743C...»
+```
+
+The script then:
+1. Extracts the hex portion with a regex
+2. Converts hex → bytes with `bytes.fromhex()`
+3. Decodes as UTF-8
+4. Pretty-prints with `xmllint --format -` (included with macOS Xcode command line tools)
+
+The equivalent AppleScript pipeline (as used by the [Typinator](https://www.ergonis.com/typinator) approach and [FmClipTools](https://github.com/DanShockley/FmClipTools)) is:
 
 ```applescript
--- Auto-detect the class, then extract and format the XML
 try
     set allowed to {«class XMSS», «class XML2», «class XMLO», «class XMSC», «class XMFD», «class XMFN», «class XMTB», «class XMVL», «class XMTH»}
     set clipboardType to item 1 of item 1 of (clipboard info) as class
     if clipboardType is in allowed then
+        -- classString will be e.g. "«class XMSS»" — must use this full form, not bare "XMSS"
         set classString to clipboardType as string
         return do shell script "osascript -e '" & classString & " of (the clipboard)' | sed 's/«data ....//; s/»//' | xxd -r -p | iconv -f UTF-8 -t UTF-8 | xmllint --format -"
     end if
@@ -85,14 +99,6 @@ on error errMsg
     return "ERROR: " & errMsg
 end try
 ```
-
-What each stage does:
-
-1. `osascript -e 'XMSS of (the clipboard)'` — retrieves the raw binary value as a hex-encoded AppleScript descriptor, e.g. `«data XMSS3C3F786D6C...»`
-2. `sed 's/«data ....//; s/»//'` — strips the `«data XMSS` prefix and `»` suffix, leaving only the hex string
-3. `xxd -r -p` — converts the hex string back to raw bytes
-4. `iconv -f UTF-8 -t UTF-8` — validates and normalizes UTF-8 encoding
-5. `xmllint --format -` — pretty-prints the XML (`xmllint` is included with macOS Xcode command line tools)
 
 ### Writing (XML → FM)
 

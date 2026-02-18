@@ -57,7 +57,7 @@ FileMaker writes this format to the clipboard when you copy objects. Each object
 | One or more fields (from the Fields & Tables dialog) | `XMFD` |
 | A custom function (from the Custom Functions dialog) | `XMFN` |
 | Layout objects (selected on a layout) | `XML2` |
-| A table definition | `XMTB` |
+| A table definition (`<BaseTable>`) | `XMTB` |
 | A value list | `XMVL` |
 | A theme | `XMTH` |
 

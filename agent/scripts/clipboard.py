@@ -48,7 +48,7 @@ XML_ELEMENT_TO_CLASS = {
     'Script':         'XMSC',
     'CustomFunction': 'XMFN',
     'Field':          'XMFD',
-    'Table':          'XMTB',
+    'BaseTable':      'XMTB',
     'ValueList':      'XMVL',
     'Layout':         'XML2',
     'Theme':          'XMTH',
@@ -70,6 +70,10 @@ on error
 end try"""
     result = subprocess.run(['osascript', '-e', script], capture_output=True, text=True)
     cls = result.stdout.strip()
+    # AppleScript returns the class as «class XMSS» — extract just the four-letter code
+    match = re.search(r'«class (\w+)»', cls)
+    if match:
+        return match.group(1)
     return cls if cls else None
 
 
@@ -88,22 +92,38 @@ def read_from_clipboard(output_path=None):
         print('ERROR: No FileMaker objects found on clipboard.', file=sys.stderr)
         sys.exit(1)
 
-    # Extract hex-encoded binary, decode to bytes, validate UTF-8, format XML.
-    # The sed pattern strips the «data XMSS prefix and » suffix that osascript emits.
-    # xmllint --format pretty-prints; it ships with macOS Xcode command line tools.
-    cmd = (
-        f"osascript -e '{cls} of (the clipboard)'"
-        f" | sed 's/\u00abdata ....//; s/\u00bb//'"
-        f" | xxd -r -p"
-        f" | iconv -f UTF-8 -t UTF-8"
-        f" | xmllint --format -"
+    # Use "the clipboard as «class XMSS»" rather than "«class XMSS» of (the clipboard)".
+    # The "of" form treats the clipboard as a record and fails when the clipboard's
+    # primary type is plain text (e.g. a single text label copied in Layout Mode).
+    # The "as" coercion form locates the requested type regardless of primary type.
+    cls_expr = f'\u00abclass {cls}\u00bb'  # «class XMSS»
+    result = subprocess.run(
+        ['osascript', '-e', f'the clipboard as {cls_expr}'],
+        capture_output=True
     )
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f'ERROR: {result.stderr.strip()}', file=sys.stderr)
+        print(f'ERROR: {result.stderr.decode().strip()}', file=sys.stderr)
         sys.exit(1)
 
-    xml = result.stdout
+    # osascript prints binary descriptors as: «data XMSS<hexstring>»
+    # Extract the hex portion, convert to bytes, decode as UTF-8.
+    # This avoids the sed/xxd/iconv shell pipeline and its quoting hazards.
+    raw = result.stdout.decode('utf-8', errors='replace').strip()
+    # Class codes are exactly 4 chars (e.g. XMSS, XML2). Using \w+ was greedy
+    # and consumed hex digits that belong to the data, leaving an odd-length capture.
+    match = re.search(r'\u00abdata [A-Z0-9]{4}([0-9A-Fa-f]+)\u00bb', raw)
+    if not match:
+        print(f'ERROR: Unexpected clipboard output:\n{raw[:300]}', file=sys.stderr)
+        sys.exit(1)
+
+    hex_str = re.sub(r'\s+', '', match.group(1))
+    xml = bytes.fromhex(hex_str).decode('utf-8')
+
+    # Pretty-print with xmllint (included with macOS Xcode command line tools)
+    fmt = subprocess.run(['xmllint', '--format', '-'], input=xml.encode('utf-8'), capture_output=True)
+    if fmt.returncode == 0:
+        xml = fmt.stdout.decode('utf-8')
+
     if output_path:
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(xml)

@@ -21,6 +21,26 @@ A FileMaker developer will **ALWAYS** reference line numbers based on the human-
 - Examples of fmxmlsnippets can be referenced in the snippet_examples folder.
 - Use the simplified fmxmlsnippet syntax for steps, NOT the verbose XML format found in xml_parsed/scripts.
 
+# Clipboard
+
+FileMaker objects are transferred via the macOS clipboard using proprietary binary descriptor classes — they are **not** plain text. `pbpaste` and `pbcopy` must never be used; they corrupt multi-byte UTF-8 characters (`≠`, `≤`, `≥`, `¶`) that are common in FileMaker calculations.
+
+The helper script `agent/scripts/clipboard.py` handles both directions:
+
+```bash
+source .venv/bin/activate
+
+# Read FM objects from clipboard → save as XML
+python agent/scripts/clipboard.py read agent/sandbox/output.xml
+
+# Write XML file → clipboard (ready to paste into FileMaker)
+python agent/scripts/clipboard.py write agent/sandbox/myscript.xml
+```
+
+The write command auto-detects the correct class from the XML content (`<Step>` → `XMSS`, `<CustomFunction>` → `XMFN`, etc.). Use `--class` to override.
+
+For full technical details including clipboard class codes and low-level encoding, see `agent/docs/CLIPBOARD.md`.
+
 # fmxmlsnippet details
 
 - The id attribute of most tags can be 0. When pasting into FileMaker it will be auto-assigned.
@@ -91,6 +111,7 @@ Only fall back to grepping `agent/xml_parsed/` if the needed information is not 
 
 5. Run `python agent/scripts/validate_snippet.py agent/sandbox/<script_name>` to validate the output
 6. Fix any errors reported by the validator before presenting the script to the user
+7. Once validation passes, run `python agent/scripts/clipboard.py write agent/sandbox/<script_name>` to load the script onto the clipboard, ready to paste directly into FileMaker
 
 # Lookup methodology
 
@@ -157,6 +178,34 @@ When CONTEXT.json includes a `custom_functions` section, prefer it for discoveri
 - `xml_parsed/custom_function_stubs/` -- XML stubs with name and ID
 
 When a script step uses a calculation that should reference a custom function (e.g. card window dimensions, formatting helpers), check these sources to confirm the function name before writing the calculation.
+
+# Library
+
+The `agent/library` folder is a curated collection of reusable fmxmlsnippet code. It contains proven, ready-to-adapt implementations across several categories:
+
+- **Scripts** — complete, parameterized scripts for common tasks such as HTTP/API requests, server-side email, container export, JSON-driven find operations, and dynamic field sorting.
+- **Steps** — reusable step block patterns including error handling (try/catch with loop or transaction), timeout polling loops, Data API query construction, record-position tracking, snapshot link generation, panel-switch timing, and performance measurement.
+- **Functions** — custom function definitions covering JSON validation and manipulation, Data API payload helpers, text processing (phonetics, diacriticals, CSS-to-FM-text conversion), container attribute inspection, trigger-state management, and developer utilities.
+- **Fields** — field definition templates including a standard audit field set and container/image attribute patterns.
+- **Layouts** — UI component objects: panel cycle buttons, click-to-sort column headers, and iOS-style toggle switches.
+- **Menus** — custom menu set configurations.
+- **Webviews** — HTML loading spinner variants for use in Set Web Viewer steps.
+
+## When to use the library
+
+Use the `library-lookup` skill to access the full manifest with keywords and file paths.
+
+**Proactively** — before writing significant script logic, scan the manifest for keyword matches. If a match exists, read that file and adapt the code rather than writing from scratch.
+
+**On direct reference** — when a developer names or describes a library item (e.g. "add a try/catch transaction wrapper", "use a loading spinner", "include the timeout loop"), use the `library-lookup` skill to locate and read the matching file.
+
+## Integration rules
+
+- Library code is in fmxmlsnippet format and follows the same output conventions as all generated code.
+- When incorporating a library Script, extract the inner `<Step>` elements only unless the user specifically requests the enclosing `<Script>` object.
+- Replace any placeholder field references, table names, script IDs, or layout IDs with real values from CONTEXT.json.
+- Adjust placeholder variable names to fit the conventions of the script being composed.
+- Do not remove structural or purpose comments embedded in library code — they carry intent.
 
 # Token efficiency
 

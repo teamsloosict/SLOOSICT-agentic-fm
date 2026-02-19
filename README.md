@@ -277,6 +277,20 @@ See [filemaker/README.md](filemaker/README.md) for full installation instruction
 - **Python 3** — required by `clipboard.py` and `validate_snippet.py`. Activate the included virtual environment: `source .venv/bin/activate`.
 - **MBS FileMaker Plugin** — required by the **Explode XML** companion script for shell execution. See [monkeybreadsoftware.com](https://www.monkeybreadsoftware.com/filemaker/).
 
+# Project Website
+
+The project website is at [petrowsky.github.io/agentic-fm](https://petrowsky.github.io/agentic-fm), built with Astro and Tailwind CSS. Source is in the `website/` folder.
+
+**Local development:**
+
+```bash
+cd website
+npm install
+npm run dev
+```
+
+**Deploy:** Automatic via GitHub Actions on push to `main`. See `website/.github/workflows/deploy.yml`.
+
 # Contributions
 
 Contributions are welcome. This project is intended to grow through collaboration with the FileMaker developer community.

@@ -279,7 +279,7 @@ See [filemaker/README.md](filemaker/README.md) for full installation instruction
 
 # Project Website
 
-The project website is at [petrowsky.github.io/agentic-fm](https://petrowsky.github.io/agentic-fm), built with Astro and Tailwind CSS. Source is in the `website/` folder.
+The project website is at [agentic-fm.com](https://agentic-fm.com), built with Astro and Tailwind CSS. Source is in the `website/` folder.
 
 **Local development:**
 

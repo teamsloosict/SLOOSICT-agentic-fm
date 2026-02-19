@@ -2,7 +2,7 @@
 
 Project website for [agentic-fm](https://github.com/petrowsky/agentic-fm), built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com).
 
-**Live:** [https://petrowsky.github.io/agentic-fm](https://petrowsky.github.io/agentic-fm)
+**Live:** [https://agentic-fm.com](https://agentic-fm.com)
 
 ## Local Development
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-The dev server starts at `http://localhost:4321/agentic-fm/`.
+The dev server starts at `http://localhost:4321/`.
 
 ## Build
 
@@ -34,7 +34,7 @@ To enable GitHub Pages:
 
 1. Go to **Settings > Pages** in the GitHub repository
 2. Under **Source**, select **GitHub Actions**
-3. Push to `main` — the workflow runs and deploys to `https://petrowsky.github.io/agentic-fm`
+3. Push to `main` — the workflow runs and deploys to `https://agentic-fm.com`
 
 ## Structure
 

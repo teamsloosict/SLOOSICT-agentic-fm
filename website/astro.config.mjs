@@ -2,8 +2,8 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://petrowsky.github.io',
-  base: '/agentic-fm',
+  site: 'https://agentic-fm.com',
+  base: '/',
   output: 'static',
   trailingSlash: 'always',
   vite: {

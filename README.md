@@ -99,7 +99,6 @@ agentic-fm/
 │   ├── snippet_examples/    # Canonical fmxmlsnippet templates for every step type
 │   ├── docs/
 │   │   ├── filemaker/       # FileMaker help reference (functions, script steps, errors)
-│   │   ├── mbs/             # MBS Plugin reference documentation
 │   │   └── knowledge/       # Curated behavioral intelligence about FileMaker
 │   ├── library/             # Proven, reusable fmxmlsnippet patterns
 │   └── xml_parsed/          # Exploded XML from the current solution (reference only)
@@ -137,8 +136,8 @@ Each knowledge document captures what an experienced FileMaker developer knows i
 
 **Current topics:**
 
-| Document | Covers |
-| --- | --- |
+| Document        | Covers                                                                                                     |
+| --------------- | ---------------------------------------------------------------------------------------------------------- |
 | `found-sets.md` | Found set attributes, actions on found sets, collecting field values, restoring found sets, snapshot links |
 
 A keyword-indexed manifest at `agent/docs/knowledge/MANIFEST.md` enables fast lookup. AI scans it for keyword matches against the current task and reads any matching documents before writing script steps.
